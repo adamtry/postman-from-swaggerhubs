@@ -1,6 +1,7 @@
 # Postman from SwaggerHub Generator
 
 Uses the Postman API to create a workspace and set of collections based on a list of SwaggerHub URLs
+
 You'll need a Postman account and a SwaggerHub account with access to the the API definitions you want to transfer
 
 ### Dependencies:
