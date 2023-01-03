@@ -1,0 +1,6 @@
+{
+  "WORKSPACE_NAME": "Workspace with my APIs",
+  "WORKSPACE_DESCRIPTION": "Workspace description",
+  "SWAGGER_URLS_FILE": "api_urls.txt",
+  "POSTMAN_API_KEY_FILE": "postman_api_key.txt"
+}
