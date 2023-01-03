@@ -8,8 +8,8 @@ Uses the Postman API to create a workspace and set of collections based on a lis
 
 ### Setup:
 1) Visit the [Postman API Key Generation Page](https://web.postman.co/settings/me/api-keys) and generate a new API key (or use an existing one)
-2) Save the key in this directory in a file named [postman_api_key.txt](postman_api_key.txt)
-3) Create and/or open the [api_urls.txt](api_urls.txt) file and list the SwaggerHub pages to add to the Postman workspace
+2) Save the key in this directory in a file named [postman_api_key.txt](postman_api_key.txt) (gitignored)
+3) Create and/or open the [api_urls.txt](api_urls.txt) (gitignored) file and list the SwaggerHub pages to add to the Postman workspace
    - These should all start with `https://app.swaggerhub.com` or `https://api.swaggerhub.com`
    - These should be separated with line breaks only, example:
 ```
