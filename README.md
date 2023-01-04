@@ -18,7 +18,7 @@ You'll need a Postman account and a SwaggerHub account with access to the the AP
 https://app.swaggerhub.com/apis/MyOrganisation/myFirstApiName/1.1.0
 https://app.swaggerhub.com/apis/MyOrganisation/mySecondApiName/2.3.0
 ```
-4) Open the [config.json](config.json) file and edit the values as needed
+4) Open the [config.json](config.json) file and edit the values as needed. To add collections to an existing workspace, specify the exact name of your existing workspace
 
 ### Run:
 1) Run the [index.py](index.py) file with `python index.py` or otherwise
