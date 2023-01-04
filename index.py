@@ -8,36 +8,51 @@ class SetupIncompleteError(Exception):
         super().__init__(message)
 
 
+class UnableToFetchSwaggerException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
 def get_or_create_workspace(workspace_name, postman_auth_headers):
     """
     Creates a workspace based on the workspace name in the config, or finds it if it already exists
     """
+
+    # List all workspaces associated with API key owner's account
     response = requests.get("https://api.getpostman.com/workspaces", headers=postman_auth_headers)
     assert response.status_code == 200, f"{response.status_code}: {response.json()}"
     workspaces_data = response.json()["workspaces"]
+
+    # Get workspace ID by specified name if possible, otherwise create a new one and return ID
     for workspace in workspaces_data:
         if workspace["name"] == workspace_name:
-            return workspace["id"]
+            ws_id = workspace["id"]
+            break
     else:
-        payload = {"workspace": {"name": workspace_name, "description": CONFIG["WORKSPACE_DESCRIPTION"],
-                                 "type": "personal"}}
-
+        payload = {
+            "workspace": {
+                "name": workspace_name,
+                "description": CONFIG["WORKSPACE_DESCRIPTION"],
+                "type": "personal"
+            }
+        }
         response = requests.post("https://api.getpostman.com/workspaces", json=payload, headers=postman_auth_headers)
         assert response.status_code == 200, f"{response.status_code}: {response.json()}"
         ws_id = response.json()["workspace"]["id"]
-        print(f"workspace {ws_id}")
-        return ws_id
+    print(f"Workspace: {ws_id}")
+    return ws_id
 
 
 def update_description_for_collection(collection_id, swagger_url, collection_schema):
     response = requests.get(f"https://api.getpostman.com/collections/{collection_id}", headers=POSTMAN_AUTH_HEADERS)
     collection_details = response.json()["collection"]
 
-    # Remove IDs from item part
+    # Remove IDs from item part so that they can be transferred to collection overwrite
     for i, collection_detail in enumerate(collection_details["item"]):
         collection_detail.pop("id")
         collection_details["item"][i] = collection_detail
 
+    # Rewrite collection with new description - this endpoint doesn't support only updating the description
     body = {
         "collection": {
             "info": {
@@ -53,7 +68,7 @@ def update_description_for_collection(collection_id, swagger_url, collection_sch
         json=body,
         headers=POSTMAN_AUTH_HEADERS
     )
-    assert response.status_code == 200, response.json()
+
     if response.status_code != 200:
         print(f"Failed to update description for collection {collection_id}")
     else:
@@ -69,7 +84,12 @@ def import_openapi_as_collection_in_workspace(swagger_url, workspace_id, postman
     """
 
     # Get Swagger JSON
-    response = requests.get(swagger_url)
+    try:
+        response = requests.get(swagger_url)
+    except:
+        raise UnableToFetchSwaggerException(f"Invalid or Private Swagger JSON URL: {swagger_url}")
+    if response.status_code == 404:
+        raise UnableToFetchSwaggerException(f"Invalid or Private Swagger JSON URL: {swagger_url}")
     swagger_data = response.json()
 
     api_name = swagger_data["info"]["title"]
@@ -118,7 +138,8 @@ def setup():
     if not os.path.isfile(cfg["SWAGGER_URLS_FILE"]) or os.stat(cfg["SWAGGER_URLS_FILE"]).st_size == 0:
         with open(cfg["SWAGGER_URLS_FILE"], "w") as outfile:
             pass
-        raise SetupIncompleteError(f"Open and fill in file: {cfg['SWAGGER_URLS_FILE']}")
+        raise SetupIncompleteError(
+            f"\n--> Open and fill in file: {cfg['SWAGGER_URLS_FILE']}. \n--> Check README.md for information.")
     else:
         with open(cfg["SWAGGER_URLS_FILE"], "r") as outfile:
             swaggers: list[str] = outfile.readlines()
@@ -129,6 +150,7 @@ def setup():
         assert any(url_segment in url for url_segment in url_can_contain), \
             f"{url} in {cfg['SWAGGER_URLS_FILE']} should be for app.swaggerhub.com or api.swaggerhub.com" \
             f" or point to a public swagger.json page"
+        assert url.startswith("https://"), "URL should point to a Swagger / OpenAPI JSON webpage"
 
         if url.startswith("https://app.swaggerhub.com"):
             swaggers[i] = swaggers[i].replace("https://app.swaggerhub.com", "https://api.swaggerhub.com")
