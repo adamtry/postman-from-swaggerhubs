@@ -1,8 +1,8 @@
-# Postman from SwaggerHub Generator
+# Postman from Swagger Generator
 
-Uses the Postman API to create a workspace and set of collections based on a list of SwaggerHub URLs
+Uses the Postman API to create a workspace and set of collections based on a list of Swagger JSON or SwaggerHub URLs
 
-You'll need a Postman account and a SwaggerHub account with access to the the API definitions you want to transfer
+You'll need a Postman account to import the collections into
 
 ### Dependencies:
 - Python 3 (current version) with pip package manager [Install from here](https://www.python.org/downloads/)
