@@ -23,6 +23,6 @@ https://app.swaggerhub.com/apis/MyOrganisation/mySecondApiName/2.3.0
 
 ### Run:
 1) Run the [index.py](index.py) file with `python index.py` or otherwise
-2) Follow the link printed to the console after a successful run (you may need to log in with Web Postman first)
+2) Follow the link printed to the console after a successful run (you may need to [log in with Web Postman](https://www.postman.com) first)
 3) The collections may have a SwaggerHub URL set under the Collection Variables for the baseUrl, so you should [edit these for each collection](https://learning.postman.com/docs/sending-requests/variables/#defining-collection-variables)
 4) Add any other environment or collection variables as needed
