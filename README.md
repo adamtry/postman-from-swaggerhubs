@@ -11,8 +11,9 @@ You'll need a Postman account and a SwaggerHub account with access to the the AP
 ### Setup:
 1) Visit the [Postman API Key Generation Page](https://web.postman.co/settings/me/api-keys) and generate a new API key (or use an existing one)
 2) Save the key in this directory in a file named [postman_api_key.txt](postman_api_key.txt) (gitignored)
-3) Create and/or open the [swagger_json_urls.txt](swagger_json_urls.txt) (gitignored) file and list the SwaggerHub pages to add to the Postman workspace
-   - These should all start with `https://app.swaggerhub.com` or `https://api.swaggerhub.com`
+3) Create and/or open the [swagger_json_urls.txt](swagger_json_urls.txt) (gitignored) file and list the Swagger json pages to add to the Postman workspace
+   - Public Swagger json links should end with `swagger.json`
+   - SwaggerHub links should start with `https://app.swaggerhub.com` or `https://api.swaggerhub.com` and end with the version
    - These should be separated with line breaks only, example:
 ```
 https://app.swaggerhub.com/apis/MyOrganisation/myFirstApiName/1.1.0
